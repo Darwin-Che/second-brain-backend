@@ -8,6 +8,14 @@ defmodule SecondBrain.Db.BrainDiskS3 do
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
+  @type t() :: %__MODULE__{
+          id: Ecto.UUID.t(),
+          account_id: Ecto.UUID.t(),
+          file_name: String.t(),
+          file_entry_cnt: non_neg_integer(),
+          seq_1: non_neg_integer()
+        }
+
   schema "brain_disk_s3" do
     belongs_to :account, Account, type: :binary_id
 

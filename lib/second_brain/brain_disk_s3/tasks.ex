@@ -43,20 +43,50 @@ defmodule SecondBrain.BrainDiskS3.Tasks do
       {:ok, tasks} ->
         tasks_by_name = Map.new(tasks, &{&1.task_name, &1})
 
-        task =
-          Map.get(tasks_by_name, task_name, %Task{
-            task_name: task_name,
-            schedules: []
-          })
+        if Map.has_key?(tasks_by_name, task_name) do
+          Logger.warning("add_task: Task #{task_name} already exists", account_id: account_id)
 
-        new_task = prepend_task_schedule(task, hours_per_week)
+          {:error, "Task already exists"}
+        else
+          task = %Task{task_name: task_name, schedules: []}
 
-        new_tasks =
-          tasks_by_name
-          |> Map.put(task_name, new_task)
-          |> Map.values()
+          new_task = prepend_task_schedule(task, hours_per_week)
 
-        put_tasks_to_disk(account_id, new_tasks)
+          new_tasks =
+            tasks_by_name
+            |> Map.put(task_name, new_task)
+            |> Map.values()
+
+          put_tasks_to_disk(account_id, new_tasks)
+        end
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @doc false
+  @spec edit_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, String.t()}
+  def edit_task(account_id, task_name, hours_per_week) do
+    case load_tasks_from_disk(account_id) do
+      {:ok, tasks} ->
+        tasks_by_name = Map.new(tasks, &{&1.task_name, &1})
+
+        case Map.get(tasks_by_name, task_name) do
+          nil ->
+            Logger.warning("edit_task: Task #{task_name} not found", account_id: account_id)
+            {:error, "Task not found"}
+
+          task ->
+            new_task = prepend_task_schedule(task, hours_per_week)
+
+            new_tasks =
+              tasks_by_name
+              |> Map.put(task_name, new_task)
+              |> Map.values()
+
+            put_tasks_to_disk(account_id, new_tasks)
+        end
 
       {:error, reason} ->
         {:error, reason}

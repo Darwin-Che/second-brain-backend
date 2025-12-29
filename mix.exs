@@ -40,6 +40,7 @@ defmodule SecondBrain.MixProject do
   defp deps do
     [
       {:bandit, "~> 1.5"},
+      {:cors_plug, "~> 3.0"},
       {:dns_cluster, "~> 0.2.0"},
       {:ecto_sql, "~> 3.13"},
       {:ex_aws, "~> 2.0"},

@@ -3,6 +3,8 @@ defmodule SecondBrainWeb.AuthController do
 
   plug Ueberauth
 
+  alias SecondBrain.Auth.Guardian, as: AuthGuardian
+
   alias SecondBrain.Db.Account
 
   alias SecondBrainWeb.Frontend
@@ -19,14 +21,13 @@ defmodule SecondBrainWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     account_info = to_account(auth)
 
-    # Find or create user in DB
     {:ok, account} = Account.find_or_create_account(account_info)
 
-    # Issue your own session/JWT
-    {:ok, token, _claims} = SecondBrain.Auth.Guardian.encode_and_sign(account)
-
-    # Redirect or respond as needed
-    redirect(conn, external: "#{Frontend.url()}/?jwt=#{token}")
+    # Use Guardian.Plug.sign_in to store JWT in session
+    conn
+    |> Plug.Conn.fetch_session()
+    |> AuthGuardian.Plug.sign_in(account)
+    |> redirect(external: "#{Frontend.url()}/")
   end
 
   def callback(%{assigns: %{ueberauth_failure: fails}} = conn, _params) do

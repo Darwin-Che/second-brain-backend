@@ -9,7 +9,7 @@ defmodule SecondBrainWeb.Api.V1.BrainController do
     account = Guardian.Plug.current_resource(conn)
 
     with {:ok, brain_state} <- Brain.get_brain_state(account.id),
-         {:ok, end_ts} <- DateTime.from_iso8601(end_ts_str),
+         {:ok, end_ts, _} <- DateTime.from_iso8601(end_ts_str),
          {:ok, task} <- Brain.start_session(brain_state, task_name, end_ts) do
       conn
       |> put_status(:created)

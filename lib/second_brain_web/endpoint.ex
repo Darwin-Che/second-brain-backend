@@ -46,6 +46,12 @@ defmodule SecondBrainWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
+  plug CORSPlug,
+    origin: [SecondBrainWeb.Frontend.url()],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    headers: ["Authorization", "Content-Type", "Accept"],
+    credentials: true
+
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options

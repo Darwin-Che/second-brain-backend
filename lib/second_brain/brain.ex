@@ -130,16 +130,6 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec add_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, String.t()}
-  def add_task(account_id, task_name, hours_per_week) do
-    BrainDiskS3.Tasks.add_task(
-      account_id,
-      task_name,
-      hours_per_week
-    )
-  end
-
-  @doc false
   @spec recommend_task(BrainState.t()) ::
           {:ok, [RecommendTask.t()]} | {:error, String.t()}
   def recommend_task(brain_state) do

@@ -263,7 +263,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
 
   @doc false
   @spec get_latest_session_history_file(Account.id_t()) ::
-          nil | %BrainDiskS3Db{}
+          nil | BrainDiskS3Db.t()
   def get_latest_session_history_file(account_id) do
     # Get the latest file name from the database
     case Repo.one(

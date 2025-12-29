@@ -1,8 +1,12 @@
 defmodule SecondBrainWeb.Router do
   use SecondBrainWeb, :router
 
+  require Logger
+
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug :fetch_session
   end
 
   pipeline :auth do
@@ -14,9 +18,8 @@ defmodule SecondBrainWeb.Router do
       module: SecondBrain.Auth.Guardian,
       error_handler: SecondBrain.Auth.AuthErrorHandler
 
-    plug Guardian.Plug.VerifySession, %{"typ" => "access"}
-    plug Guardian.Plug.VerifyHeader, %{"typ" => "access"}
-    # if there isn't anyone logged in we don't want to return an error. Use allow_blank
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.LoadResource, allow_blank: true
   end
 
@@ -32,15 +35,24 @@ defmodule SecondBrainWeb.Router do
   end
 
   scope "/api/v1", SecondBrainWeb.Api.V1 do
-    pipe_through [:api, :guardian_ensure_auth]
+    pipe_through [
+      :api,
+      :guardian_maybe_auth,
+      :guardian_ensure_auth
+    ]
 
     get "/session_history", HistoryController, :index
 
-    get "/task", TaskController, :index
+    get "/tasks", TaskController, :index
+    post "/tasks/add", TaskController, :add_task
+    post "/tasks/edit", TaskController, :edit_task
+    get "/tasks/recommend", TaskController, :recommend
 
     post "/start_session", BrainController, :start_session
-
     post "/end_session", BrainController, :end_session
+
+    get "/account", AccountController, :show
+    post "/account/logout", AccountController, :logout
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

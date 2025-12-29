@@ -4,14 +4,14 @@ defmodule SecondBrain.Db.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias SecondBrain.Repo
   alias SecondBrain.Db.Account
+  alias SecondBrain.Repo
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
   @derive {Phoenix.Param, key: :id}
 
-  @type id_t() :: String.t()
+  @type id_t() :: Ecto.UUID.t()
 
   @type t() :: %Account{
           id: id_t(),
