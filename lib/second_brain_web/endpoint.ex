@@ -52,7 +52,7 @@ defmodule SecondBrainWeb.Endpoint do
     origin: &SecondBrainWeb.Frontend.cors_plug_config/0,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     headers: ["Authorization", "Content-Type", "Accept"],
-    credentials: true
+    allow_credentials: true
 
   plug Plug.MethodOverride
   plug Plug.Head

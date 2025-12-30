@@ -10,6 +10,7 @@ defmodule SecondBrainWeb.Router do
   end
 
   pipeline :auth do
+    plug :fetch_session
     plug Ueberauth
   end
 
@@ -18,7 +19,6 @@ defmodule SecondBrainWeb.Router do
       module: SecondBrain.Auth.Guardian,
       error_handler: SecondBrain.Auth.AuthErrorHandler
 
-    plug Guardian.Plug.VerifySession
     plug Guardian.Plug.VerifyHeader
     plug Guardian.Plug.LoadResource, allow_blank: true
   end
@@ -32,6 +32,9 @@ defmodule SecondBrainWeb.Router do
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
+
+    post "/refresh", AuthController, :refresh
+    post "/logout", AuthController, :logout
   end
 
   scope "/api/v1", SecondBrainWeb.Api.V1 do
@@ -55,7 +58,6 @@ defmodule SecondBrainWeb.Router do
     post "/update_notes", BrainController, :update_notes
 
     get "/account", AccountController, :show
-    post "/account/logout", AccountController, :logout
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
