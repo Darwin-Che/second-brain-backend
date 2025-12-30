@@ -8,7 +8,9 @@ defmodule SecondBrainWeb.Endpoint do
     store: :cookie,
     key: "_second_brain_key",
     signing_salt: "DC1Qv69x",
-    same_site: "Lax"
+    same_site: "Lax",
+    secure: true,
+    http_only: true
   ]
 
   socket "/live", Phoenix.LiveView.Socket,
@@ -47,7 +49,7 @@ defmodule SecondBrainWeb.Endpoint do
     json_decoder: Phoenix.json_library()
 
   plug CORSPlug,
-    origin: [SecondBrainWeb.Frontend.url()],
+    origin: &SecondBrainWeb.Frontend.cors_plug_config/0,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     headers: ["Authorization", "Content-Type", "Accept"],
     credentials: true

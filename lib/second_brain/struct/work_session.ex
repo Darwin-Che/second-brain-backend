@@ -32,14 +32,11 @@ defmodule SecondBrain.Struct.WorkSession do
 
   @spec from_json(map()) :: WorkSession.t()
   def from_json(work_session) do
-    {:ok, start_ts, _} = work_session["start_ts"] |> DateTime.from_iso8601()
-    {:ok, end_ts, _} = work_session["end_ts"] |> DateTime.from_iso8601()
-
     %WorkSession{
       account_id: work_session["account_id"],
       task_name: work_session["task_name"],
-      start_ts: start_ts,
-      end_ts: end_ts,
+      start_ts: parse_datetime(work_session["start_ts"]),
+      end_ts: parse_datetime(work_session["end_ts"]),
       notes: work_session["notes"]
     }
   end
@@ -60,8 +57,9 @@ defmodule SecondBrain.Struct.WorkSession do
       not aligned_to_minute?(work_session.end_ts) ->
         {:error, "End timestamp is not aligned to minute"}
 
-      DateTime.compare(work_session.start_ts, work_session.end_ts) != :lt ->
-        {:error, "Start timestamp must be before end timestamp"}
+      DateTime.compare(work_session.start_ts, work_session.end_ts) == :gt ->
+        {:error,
+         "Start #{inspect(work_session.start_ts)} must be before End #{inspect(work_session.end_ts)}: #{DateTime.compare(work_session.start_ts, work_session.end_ts)}"}
 
       true ->
         {:ok, work_session}
@@ -98,5 +96,11 @@ defmodule SecondBrain.Struct.WorkSession do
 
   defp week_number_from_datetime(session, cur_ts) do
     DateTime.diff(cur_ts, session.start_ts, :day) |> div(7)
+  end
+
+  @doc false
+  @spec update_notes(WorkSession.t(), String.t()) :: WorkSession.t()
+  def update_notes(%WorkSession{} = work_session, notes) do
+    %WorkSession{work_session | notes: notes}
   end
 end

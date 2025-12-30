@@ -15,8 +15,6 @@ config :second_brain, SecondBrain.Repo,
   migration_primary_key: [name: :id, type: :binary_id],
   migration_foreign_key: [type: :binary_id]
 
-# Ueberauth
-
 config :ueberauth, Ueberauth,
   providers: [
     google:
@@ -25,12 +23,6 @@ config :ueberauth, Ueberauth,
          default_scope: "email profile"
        ]}
   ]
-
-# Guardian
-
-config :second_brain, SecondBrain.Auth.Guardian,
-  issuer: "second_brain",
-  secret_key: "LpY6d4fbtN0IPlW2LIIaScBfogi6zC5Gg28VXdd0HYG43bBj1V6WcIP2OS9S-9__"
 
 # Configure the endpoint
 config :second_brain, SecondBrainWeb.Endpoint,

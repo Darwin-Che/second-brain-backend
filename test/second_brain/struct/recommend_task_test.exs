@@ -193,15 +193,14 @@ defmodule SecondBrain.Struct.RecommendTaskTest do
     test "Basic Setup" do
       tasks = setup_tasks()
       sessions = setup_sessions()
-      cur_ts = DateTime.utc_now()
 
-      {:ok, recommendations} = RecommendTask.recommend_by_history(tasks, sessions, cur_ts)
+      {:ok, recommendations} = RecommendTask.recommend_by_history(tasks, sessions, @cur_ts)
 
       assert recommendations == [
                %SecondBrain.Struct.RecommendTask{
                  task_name: "Task 1",
                  desired_effort: 10.0,
-                 current_percent_effort: 30.0,
+                 current_percent_effort: 33.3,
                  last_session: %SecondBrain.Struct.WorkSession{
                    account_id: nil,
                    task_name: "Task 1",
@@ -213,7 +212,7 @@ defmodule SecondBrain.Struct.RecommendTaskTest do
                %SecondBrain.Struct.RecommendTask{
                  task_name: "Task 2",
                  desired_effort: 7.0,
-                 current_percent_effort: 52.8,
+                 current_percent_effort: 51.6,
                  last_session: %SecondBrain.Struct.WorkSession{
                    account_id: nil,
                    task_name: "Task 2",
@@ -228,16 +227,15 @@ defmodule SecondBrain.Struct.RecommendTaskTest do
     test "limit only 1 return" do
       tasks = setup_tasks()
       sessions = setup_sessions()
-      cur_ts = DateTime.utc_now()
 
       {:ok, recommendations} =
-        RecommendTask.recommend_by_history(tasks, sessions, cur_ts, limit_n: 1)
+        RecommendTask.recommend_by_history(tasks, sessions, @cur_ts, limit_n: 1)
 
       assert recommendations == [
                %SecondBrain.Struct.RecommendTask{
                  task_name: "Task 1",
                  desired_effort: 10.0,
-                 current_percent_effort: 30.0,
+                 current_percent_effort: 33.3,
                  last_session: %SecondBrain.Struct.WorkSession{
                    account_id: nil,
                    task_name: "Task 1",

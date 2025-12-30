@@ -131,6 +131,18 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
+  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  def update_notes(brain_state, notes) do
+    case BrainState.update_notes(brain_state, notes) do
+      {:ok, new_brain_state} ->
+        BrainState.cache_brain(new_brain_state)
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  @doc false
   @spec recommend_task(Account.id_t()) :: {:ok, [RecommendTask.t()]} | {:error, String.t()}
   def recommend_task(account_id) do
     end_time = cur_ts_am()

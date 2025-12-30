@@ -2,14 +2,8 @@ import Config
 
 # Configure your database
 config :second_brain, SecondBrain.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "second_brain_dev",
-  port: 5432,
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -65,21 +59,3 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
-
-#####
-
-config :ex_aws,
-  access_key_id: "minio",
-  secret_access_key: "minio123",
-  region: "us-east-1",
-  s3: [
-    scheme: "http://",
-    host: "localhost",
-    port: 9000
-  ]
-
-config :second_brain, SecondBrain.BrainDiskS3,
-  bucket_name: "second-brain-dev",
-  max_sessions_per_file: 4
-
-config :second_brain, SecondBrainWeb.Frontend, url: "http://localhost:3000"

@@ -41,6 +41,8 @@ defmodule SecondBrainWeb.Router do
       :guardian_ensure_auth
     ]
 
+    get "/brain/state", BrainController, :state
+
     get "/session_history", HistoryController, :index
 
     get "/tasks", TaskController, :index
@@ -50,6 +52,7 @@ defmodule SecondBrainWeb.Router do
 
     post "/start_session", BrainController, :start_session
     post "/end_session", BrainController, :end_session
+    post "/update_notes", BrainController, :update_notes
 
     get "/account", AccountController, :show
     post "/account/logout", AccountController, :logout

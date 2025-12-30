@@ -33,6 +33,8 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix,
   sort_verified_routes_query_params: true
 
+# TEST uses no runtime configuration
+
 config :ex_aws,
   access_key_id: "minio",
   secret_access_key: "minio123",
@@ -46,3 +48,7 @@ config :ex_aws,
 config :second_brain, SecondBrain.BrainDiskS3,
   bucket_name: "second-brain-test",
   max_sessions_per_file: 2
+
+config :second_brain, SecondBrain.Auth.Guardian,
+  issuer: "second_brain",
+  secret_key: "LpY6d4fbtN0IPlW2LIIaScBfogi6zC5Gg28VXdd0HYG43bBj1V6WcIP2OS9S-9__"

@@ -26,4 +26,5 @@ erl_crash.dump
 second_brain-*.tar
 
 # Secrets
-.env
+.env_prod
+.env_secret

@@ -3,7 +3,7 @@ elixir = '1.19.4-otp-28'
 erlang = '28.3'
 
 [env]
-_.file = '.env'
+_.file = ['.env', '.env_secret']
 
 [tasks]
 prepush = [

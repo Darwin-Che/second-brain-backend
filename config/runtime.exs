@@ -24,23 +24,6 @@ config :second_brain, SecondBrainWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
-
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
-
-  config :second_brain, SecondBrain.Repo,
-    # ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    # For machines with several cores, consider starting multiple pools of `pool_size`
-    # pool_count: 4,
-    socket_options: maybe_ipv6
-
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
   # want to use a different value for prod and you most likely don't want
@@ -99,31 +82,56 @@ if config_env() == :prod do
   #       force_ssl: [hsts: true]
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
+end
 
-  # Configure S3 client for access to Tigris
+if config_env() != :test do
+  database_url =
+    System.get_env("DATABASE_URL") ||
+      raise """
+      environment variable DATABASE_URL is missing.
+      For example: ecto://USER:PASS@HOST/DATABASE
+      """
+
+  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+
+  config :second_brain, SecondBrain.Repo,
+    # ssl: true,
+    url: database_url,
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    # For machines with several cores, consider starting multiple pools of `pool_size`
+    # pool_count: 4,
+    socket_options: maybe_ipv6
+
+  config :second_brain, SecondBrain.Auth.Guardian,
+    issuer: "second_brain",
+    secret_key: System.fetch_env!("GUARDIAN_SECRET")
+
+  config :second_brain, SecondBrainWeb.Frontend, url: System.fetch_env!("FRONTEND_URL")
+
+  aws_s3_uri =
+    URI.parse(
+      System.get_env("AWS_ENDPOINT_URL_S3") ||
+        raise("AWS_ENDPOINT_URL_S3 is not set")
+    )
+
   config :ex_aws,
-    debug_requests: true,
     json_codec: Jason,
-    access_key_id: {:system, "AWS_ACCESS_KEY_ID"},
-    secret_access_key: {:system, "AWS_SECRET_ACCESS_KEY"}
+    access_key_id: System.fetch_env!("AWS_ACCESS_KEY_ID"),
+    secret_access_key: System.fetch_env!("AWS_SECRET_ACCESS_KEY"),
+    region: System.fetch_env!("AWS_REGION"),
+    s3: [
+      scheme: "#{aws_s3_uri.scheme}://",
+      host: aws_s3_uri.host,
+      port: aws_s3_uri.port,
+      path_style_access: true
+    ]
 
   config :second_brain, SecondBrain.BrainDiskS3,
-    bucket_name: System.get_env("BUCKET_NAME", "DEFAULT_BUCKET_NAME"),
-    max_sessions_per_file: System.get_env("MAX_SESSIONS_PER_FILE", 16)
-end
+    bucket_name: System.fetch_env!("BUCKET_NAME"),
+    max_sessions_per_file: System.fetch_env!("MAX_SESSIONS_PER_FILE")
 
-config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: {System, :get_env, ["GOOGLE_CLIENT_ID"]},
-  client_secret: {System, :get_env, ["GOOGLE_CLIENT_SECRET"]},
-  redirect_uri: {System, :get_env, ["GOOGLE_REDIRECT_URI"]}
-
-if config_env() == :prod do
-  config :second_brain, SecondBrain.Auth.Guardian,
-    issuer: "second_brain_prod",
-    secret_key: System.get_env("GUARDIAN_SECRET_KEY")
-end
-
-if config_env() == :prod do
-  config :second_brain, SecondBrainWeb.Frontend,
-    url: System.get_env("FRONTEND_URL", "https://your-frontend-domain.com")
+  config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+    client_id: {System, :fetch_env!, ["GOOGLE_CLIENT_ID"]},
+    client_secret: {System, :fetch_env!, ["GOOGLE_CLIENT_SECRET"]},
+    redirect_uri: {System, :fetch_env!, ["GOOGLE_REDIRECT_URI"]}
 end

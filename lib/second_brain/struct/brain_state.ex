@@ -12,6 +12,7 @@ defmodule SecondBrain.Struct.BrainState do
 
   @type brain_status() :: :idle | :busy | :onboarding
 
+  @derive {Jason.Encoder, only: [:account_id, :brain_status, :last_session]}
   defstruct [
     :account_id,
     :brain_status,
@@ -101,5 +102,15 @@ defmodule SecondBrain.Struct.BrainState do
           {:error, error}
       end
     end
+  end
+
+  @doc false
+  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  def update_notes(%BrainState{last_session: nil} = _brain_state, _notes) do
+    {:error, "No active session to update note"}
+  end
+
+  def update_notes(%BrainState{last_session: last_session} = brain_state, notes) do
+    {:ok, %{brain_state | last_session: WorkSession.update_notes(last_session, notes)}}
   end
 end

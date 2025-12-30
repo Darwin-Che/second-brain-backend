@@ -40,4 +40,13 @@ defmodule SecondBrain.Helper do
       datetime2
     end
   end
+
+  def parse_datetime(nil), do: nil
+
+  def parse_datetime(datetime_str) do
+    case DateTime.from_iso8601(datetime_str) do
+      {:ok, datetime, _} -> datetime
+      _ -> nil
+    end
+  end
 end
