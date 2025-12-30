@@ -81,4 +81,22 @@ defmodule SecondBrain.Struct.WorkSession do
     }
     |> valid?()
   end
+
+  @doc false
+  @spec split_by_week([WorkSession.t()], DateTime.t()) :: %{
+          {non_neg_integer(), {DateTime.t(), DateTime.t()}} => [WorkSession.t()]
+        }
+  def split_by_week(session_history, cur_ts) do
+    Enum.group_by(session_history, fn session ->
+      week_number = week_number_from_datetime(session, cur_ts)
+      week_start = DateTime.shift(cur_ts, week: -(week_number + 1))
+      week_end = DateTime.shift(week_start, week: 1)
+
+      {week_number, {week_start, week_end}}
+    end)
+  end
+
+  defp week_number_from_datetime(session, cur_ts) do
+    DateTime.diff(cur_ts, session.start_ts, :day) |> div(7)
+  end
 end

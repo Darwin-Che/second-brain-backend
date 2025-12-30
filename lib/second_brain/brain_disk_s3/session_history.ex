@@ -22,6 +22,10 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
 
   ### READER FUNCTIONS
 
+  @doc false
+  @spec get_work_session_history_by_time(Account.id_t(), DateTime.t(), DateTime.t()) :: [
+          WorkSession.t()
+        ]
   def get_work_session_history_by_time(account_id, start_ts, end_ts) do
     # Can be optimized
     account_id
@@ -32,6 +36,8 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
     |> Enum.to_list()
   end
 
+  @doc false
+  @spec get_work_session_history_by_n(Account.id_t(), non_neg_integer()) :: [WorkSession.t()]
   def get_work_session_history_by_n(account_id, n) do
     # Can be optimized
     account_id
@@ -41,6 +47,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
   end
 
   @doc false
+  @spec get_work_session_history_stream(Account.id_t()) :: Enumerable.t()
   def get_work_session_history_stream(account_id) do
     Stream.unfold(
       {account_id, :root},
@@ -213,7 +220,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
         account_id: account_id
       )
 
-      # TODO: Handle this gracefully with Retry or Revert
+      # Handle this gracefully with Retry or Revert
 
       {:error, :failed_to_update_files}
     else

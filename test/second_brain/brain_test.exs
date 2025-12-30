@@ -7,7 +7,7 @@ defmodule SecondBrain.BrainTest do
 
   describe "get_brain_state/1" do
     test "returns error when brain not found" do
-      assert Brain.get_brain_state(Ecto.UUID.generate()) == {:error, "Brain not found"}
+      assert Brain.get_brain_state(Ecto.UUID.generate()) == {:error, "Account not found"}
     end
 
     test "returns brain state when found" do

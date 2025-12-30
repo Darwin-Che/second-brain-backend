@@ -7,13 +7,13 @@ defmodule SecondBrain.Struct.TaskSchedule do
   defstruct [
     :start_at,
     :end_at,
-    :hours_per_week
+    hours_per_week: 0.0
   ]
 
   @type t() :: %__MODULE__{
           start_at: DateTime.t(),
           end_at: DateTime.t(),
-          hours_per_week: non_neg_integer()
+          hours_per_week: float()
         }
 
   def from_json(task_schedule) do

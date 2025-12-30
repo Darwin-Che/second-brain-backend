@@ -12,6 +12,15 @@ defmodule SecondBrain.Db.BrainCache do
 
   require Logger
 
+  @type t() :: %BrainCache{
+          account_id: Account.id_t(),
+          brain_status: integer(),
+          last_session_task_name: String.t() | nil,
+          last_session_start_ts: DateTime.t() | nil,
+          last_session_end_ts: DateTime.t() | nil,
+          last_session_notes: String.t() | nil
+        }
+
   @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "brain_cache" do
@@ -77,7 +86,7 @@ defmodule SecondBrain.Db.BrainCache do
   def brain_status_decode(2), do: :busy
 
   @doc false
-  @spec update(map()) :: :ok | {:error, any()}
+  @spec update(map()) :: {:ok, BrainCache.t()} | {:error, any()}
   def update(%BrainCache{} = brain_cache) do
     repo = SecondBrain.Repo
     attrs = Map.from_struct(brain_cache)
@@ -91,16 +100,14 @@ defmodule SecondBrain.Db.BrainCache do
 
         %BrainCache{}
         |> BrainCache.changeset(attrs)
-        |> repo.insert!()
+        |> repo.insert()
 
       brain_cache ->
         # Update existing record
         brain_cache
         |> BrainCache.changeset(attrs)
-        |> repo.update!()
+        |> repo.update()
     end
-
-    :ok
   end
 
   @doc false

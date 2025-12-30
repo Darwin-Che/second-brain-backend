@@ -1,6 +1,8 @@
 defmodule SecondBrainWeb.Api.V1.TaskController do
   use SecondBrainWeb, :controller
 
+  alias SecondBrain.Brain
+
   alias SecondBrain.BrainDiskS3.Tasks
 
   action_fallback SecondBrainWeb.FallbackController
@@ -37,6 +39,20 @@ defmodule SecondBrainWeb.Api.V1.TaskController do
         {:ok, tasks} = Tasks.load_tasks_from_disk(account.id)
 
         render(conn, :index, tasks: tasks)
+
+      {:error, error} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: error})
+    end
+  end
+
+  def recommend(conn, _params) do
+    account = Guardian.Plug.current_resource(conn)
+
+    case Brain.recommend_task(account.id) do
+      {:ok, recommend_tasks} ->
+        render(conn, :recommend_tasks, recommend_tasks: recommend_tasks)
 
       {:error, error} ->
         conn

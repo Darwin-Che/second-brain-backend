@@ -10,7 +10,7 @@ defmodule SecondBrain.Struct.BrainState do
 
   alias SecondBrain.Db.BrainCache
 
-  @type brain_status() :: :idle | :busy
+  @type brain_status() :: :idle | :busy | :onboarding
 
   defstruct [
     :account_id,
@@ -21,9 +21,32 @@ defmodule SecondBrain.Struct.BrainState do
   @type t() :: %__MODULE__{
           account_id: Account.id_t(),
           brain_status: brain_status(),
-          last_session: WorkSession.t()
+          last_session: WorkSession.t() | nil
         }
 
+  @doc false
+  @spec new_onboarding(Account.id_t()) :: t()
+  def new_onboarding(account_id) do
+    %BrainState{
+      account_id: account_id,
+      brain_status: :onboarding,
+      last_session: nil
+    }
+  end
+
+  @doc false
+  @spec cache_brain(BrainState.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  def cache_brain(%BrainState{} = brain_state) do
+    brain_cache = BrainCache.from_brain_state(brain_state)
+
+    case BrainCache.update(brain_cache) do
+      {:ok, new_brain_cache} -> {:ok, BrainState.from_brain_cache(new_brain_cache)}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @doc false
+  @spec from_brain_cache(BrainCache.t()) :: t()
   def from_brain_cache(%BrainCache{} = brain_cache) do
     %BrainState{
       account_id: brain_cache.account_id,

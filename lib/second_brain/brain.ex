@@ -56,7 +56,14 @@ defmodule SecondBrain.Brain do
   def get_brain_state(account_id) do
     case Repo.get_by(BrainCache, account_id: account_id) do
       nil ->
-        {:error, "Brain not found"}
+        # if account actually exists, should insert a new row
+        if Repo.get(Account, account_id) do
+          account_id
+          |> BrainState.new_onboarding()
+          |> BrainState.cache_brain()
+        else
+          {:error, "Account not found"}
+        end
 
       brain_cache ->
         {:ok, BrainState.from_brain_cache(brain_cache)}
@@ -83,10 +90,7 @@ defmodule SecondBrain.Brain do
       {:ok, session} ->
         case BrainState.start_session(brain_state, session) do
           {:ok, new_brain_state} ->
-            new_brain_cache = BrainCache.from_brain_state(new_brain_state)
-            BrainCache.update(new_brain_cache)
-
-            {:ok, new_brain_state}
+            BrainState.cache_brain(new_brain_state)
 
           {:error, reason} ->
             {:error, reason}
@@ -110,10 +114,7 @@ defmodule SecondBrain.Brain do
       :busy ->
         case BrainState.end_session(brain_state) do
           {:ok, new_brain_state} ->
-            :ok =
-              new_brain_state
-              |> BrainCache.from_brain_state()
-              |> BrainCache.update()
+            {:ok, new_brain_state} = BrainState.cache_brain(new_brain_state)
 
             :ok =
               BrainDiskS3.SessionHistory.prepend_work_session(
@@ -130,33 +131,27 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec recommend_task(BrainState.t()) ::
-          {:ok, [RecommendTask.t()]} | {:error, String.t()}
-  def recommend_task(brain_state) do
-    case brain_state.brain_status do
-      :busy ->
-        {:error, "Brain is busy, cannot recommend tasks"}
+  @spec recommend_task(Account.id_t()) :: {:ok, [RecommendTask.t()]} | {:error, String.t()}
+  def recommend_task(account_id) do
+    end_time = cur_ts_am()
+    start_time = DateTime.shift(end_time, week: -4)
 
-      :idle ->
-        {:ok, tasks} = BrainDiskS3.Tasks.load_tasks_from_disk(brain_state.account_id)
-
-        start_time = DateTime.shift(DateTime.utc_now(), week: -4)
-        end_time = DateTime.utc_now()
-
-        session_history =
-          BrainDiskS3.SessionHistory.get_work_session_history_by_time(
-            brain_state.account_id,
-            start_time,
-            end_time
-          )
-
-        RecommendTask.recommend_by_history(tasks, session_history)
+    with {:ok, tasks} <- BrainDiskS3.Tasks.load_tasks_from_disk(account_id),
+         session_history <-
+           BrainDiskS3.SessionHistory.get_work_session_history_by_time(
+             account_id,
+             start_time,
+             end_time
+           ) do
+      RecommendTask.recommend_by_history(tasks, session_history, end_time, limit_n: 5)
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
   @doc false
-  @spec get_work_session_history(BrainState.t()) :: [WorkSession.t()]
-  def get_work_session_history(brain_state) do
-    BrainDiskS3.SessionHistory.get_work_session_history_by_n(brain_state.account_id, 10)
+  @spec get_work_session_history(Account.id_t()) :: [WorkSession.t()]
+  def get_work_session_history(account_id) do
+    BrainDiskS3.SessionHistory.get_work_session_history_by_n(account_id, 10)
   end
 end

@@ -18,4 +18,26 @@ defmodule SecondBrain.Helper do
 
     for _ <- 1..length, into: "", do: <<Enum.random(chars)>>
   end
+
+  def datetime_max(nil, datetime2), do: datetime2
+  def datetime_max(datetime1, nil), do: datetime1
+
+  def datetime_max(datetime1, datetime2) do
+    if DateTime.compare(datetime1, datetime2) == :gt do
+      datetime1
+    else
+      datetime2
+    end
+  end
+
+  def datetime_min(nil, datetime2), do: datetime2
+  def datetime_min(datetime1, nil), do: datetime1
+
+  def datetime_min(datetime1, datetime2) do
+    if DateTime.compare(datetime1, datetime2) == :lt do
+      datetime1
+    else
+      datetime2
+    end
+  end
 end
