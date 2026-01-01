@@ -106,8 +106,59 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
   ### WRITER FUNCTIONS
 
   @doc false
+  @spec update_work_session(Account.id_t(), String.t(), map()) ::
+          {:ok, WorkSession.t()} | {:error, any()}
+  def update_work_session(account_id, id, changes) do
+    # Load all files
+    session_files =
+      account_id
+      |> get_all_session_history_files()
+      |> Enum.sort_by(& &1.seq_1, :desc)
+
+    Enum.reduce_while(session_files, {:error, :not_found}, fn file, acc ->
+      case do_update_work_session(account_id, file.file_name, id, changes) do
+        {:ok, session} ->
+          {:halt, {:ok, session}}
+
+        {:error, _reason} ->
+          {:cont, acc}
+      end
+    end)
+  end
+
+  defp do_update_work_session(account_id, file_name, id, changes) do
+    with {:ok, session_list} <- load_brain_disk_session_history(account_id, file_name),
+         index when is_integer(index) <-
+           Enum.find_index(session_list, fn session -> session.id == id end) do
+      old_session = Enum.at(session_list, index)
+
+      case WorkSession.update_with_changes(old_session, changes) do
+        {:ok, updated_session} ->
+          new_session_list = List.replace_at(session_list, index, updated_session)
+
+          case put_brain_disk_session_history(account_id, file_name, new_session_list) do
+            :ok -> {:ok, updated_session}
+            {:error, reason} -> {:error, reason}
+          end
+
+        {:error, reason} ->
+          Logger.error("Failed to update work session #{id} in #{file_name}: #{inspect(reason)}")
+          {:error, reason}
+      end
+    else
+      nil -> {:error, :not_found}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @doc false
   @spec prepend_work_session(Account.id_t(), WorkSession.t()) :: :ok | {:error, any()}
   def prepend_work_session(account_id, work_session) do
+    work_session =
+      if is_nil(work_session.id),
+        do: %{work_session | id: WorkSession.generate_id()},
+        else: work_session
+
     # Load the latest file via lookup the Repo
     case get_latest_session_history_file(account_id) do
       nil ->
@@ -291,7 +342,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
 
   @doc false
   @spec load_brain_disk_session_history(Account.id_t(), String.t()) ::
-          {:ok, [WorkSession.t()]} | {:error, String.t()}
+          {:ok, [WorkSession.t()]} | {:error, any()}
   def load_brain_disk_session_history(account_id, file_name) do
     object_path = session_history_object_path(account_id, file_name)
 

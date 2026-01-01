@@ -8,6 +8,7 @@ defmodule SecondBrain.Struct.WorkSession do
 
   @derive {Jason.Encoder,
            only: [
+             :id,
              :account_id,
              :task_name,
              :start_ts,
@@ -15,6 +16,7 @@ defmodule SecondBrain.Struct.WorkSession do
              :notes
            ]}
   defstruct [
+    :id,
     :account_id,
     :task_name,
     :start_ts,
@@ -23,6 +25,7 @@ defmodule SecondBrain.Struct.WorkSession do
   ]
 
   @type t() :: %WorkSession{
+          id: String.t() | nil,
           account_id: Account.id_t(),
           task_name: String.t(),
           start_ts: DateTime.t(),
@@ -33,6 +36,7 @@ defmodule SecondBrain.Struct.WorkSession do
   @spec from_json(map()) :: WorkSession.t()
   def from_json(work_session) do
     %WorkSession{
+      id: work_session["id"],
       account_id: work_session["account_id"],
       task_name: work_session["task_name"],
       start_ts: parse_datetime(work_session["start_ts"]),
@@ -42,7 +46,7 @@ defmodule SecondBrain.Struct.WorkSession do
   end
 
   @doc false
-  @spec valid?(WorkSession.t()) :: {:ok, WorkSession.t()} | {:error, String.t()}
+  @spec valid?(WorkSession.t()) :: {:ok, WorkSession.t()} | {:error, any()}
   def valid?(%WorkSession{} = work_session) do
     cond do
       is_nil(work_session.start_ts) ->
@@ -68,9 +72,10 @@ defmodule SecondBrain.Struct.WorkSession do
 
   @doc false
   @spec new(Account.id_t(), String.t(), DateTime.t(), DateTime.t(), String.t() | nil) ::
-          {:ok, WorkSession.t()} | {:error, String.t()}
+          {:ok, WorkSession.t()} | {:error, any()}
   def new(account_id, task_name, start_ts, end_ts, notes \\ nil) do
     %WorkSession{
+      id: generate_id(),
       account_id: account_id,
       task_name: task_name,
       start_ts: start_ts,
@@ -102,5 +107,29 @@ defmodule SecondBrain.Struct.WorkSession do
   @spec update_notes(WorkSession.t(), String.t()) :: WorkSession.t()
   def update_notes(%WorkSession{} = work_session, notes) do
     %WorkSession{work_session | notes: notes}
+  end
+
+  @doc false
+  @spec update_with_changes(WorkSession.t(), map()) ::
+          {:ok, WorkSession.t()} | {:error, any()}
+  def update_with_changes(%WorkSession{} = work_session, changes) do
+    # Only allow changes on duration and notes，return an error if
+    if Map.keys(changes) -- [:duration, :notes] == [] do
+      # Calculate new end_ts if duration is changed
+      if Map.has_key?(changes, :duration) do
+        new_end_ts = DateTime.shift(work_session.start_ts, minute: changes[:duration])
+        {:ok, %WorkSession{work_session | end_ts: new_end_ts, notes: changes[:notes]}}
+      else
+        {:ok, %WorkSession{work_session | notes: changes[:notes]}}
+      end
+    else
+      {:error, "Invalid changes #{inspect(changes)} #{inspect(work_session)}"}
+    end
+  end
+
+  @doc false
+  @spec generate_id :: String.t()
+  def generate_id do
+    "#{UUIDv7.cast!(UUIDv7.bingenerate())}"
   end
 end

@@ -37,7 +37,7 @@ defmodule SecondBrain.Struct.RecommendTask do
 
   @doc false
   @spec recommend_by_history([Task.t()], [WorkSession.t()], DateTime.t(), keyword()) ::
-          {:ok, [__MODULE__.t()]} | {:error, String.t()}
+          {:ok, [__MODULE__.t()]} | {:error, any()}
   def recommend_by_history(available_tasks, session_history, cur_ts, opts \\ []) do
     limit_n = Keyword.get(opts, :limit_n, 5)
 

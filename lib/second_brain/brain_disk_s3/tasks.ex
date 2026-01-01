@@ -37,7 +37,7 @@ defmodule SecondBrain.BrainDiskS3.Tasks do
   ### WRITER FUNCTIONS
 
   @doc false
-  @spec add_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, String.t()}
+  @spec add_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, any()}
   def add_task(account_id, task_name, hours_per_week) do
     case load_tasks_from_disk(account_id) do
       {:ok, tasks} ->
@@ -66,7 +66,7 @@ defmodule SecondBrain.BrainDiskS3.Tasks do
   end
 
   @doc false
-  @spec edit_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, String.t()}
+  @spec edit_task(Account.id_t(), String.t(), non_neg_integer()) :: :ok | {:error, any()}
   def edit_task(account_id, task_name, hours_per_week) do
     case load_tasks_from_disk(account_id) do
       {:ok, tasks} ->

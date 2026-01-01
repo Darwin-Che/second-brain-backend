@@ -52,7 +52,7 @@ defmodule SecondBrain.Brain do
   alias SecondBrain.Struct.WorkSession
 
   @doc false
-  @spec get_brain_state(Account.id_t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  @spec get_brain_state(Account.id_t()) :: {:ok, BrainState.t()} | {:error, any()}
   def get_brain_state(account_id) do
     case Repo.get_by(BrainCache, account_id: account_id) do
       nil ->
@@ -72,7 +72,7 @@ defmodule SecondBrain.Brain do
 
   @doc false
   @spec start_session(BrainState.t(), String.t(), DateTime.t()) ::
-          {:ok, BrainState.t()} | {:error, String.t()}
+          {:ok, BrainState.t()} | {:error, any()}
   # credo:disable-for-this-function Credo.Check.Refactor.Nesting
   def start_session(brain_state, task_name, end_ts) do
     case brain_state.brain_status do
@@ -102,7 +102,7 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec end_session(BrainState.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  @spec end_session(BrainState.t()) :: {:ok, BrainState.t()} | {:error, any()}
   def end_session(brain_state) do
     case brain_state.brain_status do
       :idle ->
@@ -131,7 +131,7 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, any()}
   def update_notes(brain_state, notes) do
     case BrainState.update_notes(brain_state, notes) do
       {:ok, new_brain_state} ->
@@ -143,7 +143,7 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec recommend_task(Account.id_t()) :: {:ok, [RecommendTask.t()]} | {:error, String.t()}
+  @spec recommend_task(Account.id_t()) :: {:ok, [RecommendTask.t()]} | {:error, any()}
   def recommend_task(account_id) do
     end_time = cur_ts_am()
     start_time = DateTime.shift(end_time, week: -4)

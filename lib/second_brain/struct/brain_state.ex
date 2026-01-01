@@ -36,18 +36,18 @@ defmodule SecondBrain.Struct.BrainState do
   end
 
   @doc false
-  @spec cache_brain(BrainState.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  @spec cache_brain(BrainState.t()) :: {:ok, BrainState.t()} | {:error, any()}
   def cache_brain(%BrainState{} = brain_state) do
     brain_cache = BrainCache.from_brain_state(brain_state)
 
     case BrainCache.update(brain_cache) do
-      {:ok, new_brain_cache} -> {:ok, BrainState.from_brain_cache(new_brain_cache)}
+      {:ok, new_brain_cache} -> {:ok, from_brain_cache(new_brain_cache)}
       {:error, error} -> {:error, error}
     end
   end
 
   @doc false
-  @spec from_brain_cache(BrainCache.t()) :: t()
+  @spec from_brain_cache(BrainCache.t()) :: BrainState.t()
   def from_brain_cache(%BrainCache{} = brain_cache) do
     %BrainState{
       account_id: brain_cache.account_id,
@@ -105,7 +105,7 @@ defmodule SecondBrain.Struct.BrainState do
   end
 
   @doc false
-  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, String.t()}
+  @spec update_notes(BrainState.t(), String.t()) :: {:ok, BrainState.t()} | {:error, any()}
   def update_notes(%BrainState{last_session: nil} = _brain_state, _notes) do
     {:error, "No active session to update note"}
   end

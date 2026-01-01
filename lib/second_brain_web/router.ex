@@ -47,6 +47,7 @@ defmodule SecondBrainWeb.Router do
     get "/brain/state", BrainController, :state
 
     get "/session_history", HistoryController, :index
+    post "/session_update", HistoryController, :update
 
     get "/tasks", TaskController, :index
     post "/tasks/add", TaskController, :add_task

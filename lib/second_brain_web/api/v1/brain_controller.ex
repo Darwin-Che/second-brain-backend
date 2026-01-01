@@ -17,7 +17,7 @@ defmodule SecondBrainWeb.Api.V1.BrainController do
       {:error, error} ->
         conn
         |> put_status(:bad_request)
-        |> json(%{error: error})
+        |> json(%{error: inspect(error)})
     end
   end
 
@@ -35,7 +35,7 @@ defmodule SecondBrainWeb.Api.V1.BrainController do
       {:error, error} ->
         conn
         |> put_status(:bad_request)
-        |> json(%{error: error})
+        |> json(%{error: inspect(error)})
     end
   end
 
@@ -52,7 +52,7 @@ defmodule SecondBrainWeb.Api.V1.BrainController do
       {:error, error} ->
         conn
         |> put_status(:bad_request)
-        |> json(%{error: error})
+        |> json(%{error: inspect(error)})
     end
   end
 
@@ -68,7 +68,7 @@ defmodule SecondBrainWeb.Api.V1.BrainController do
       {:error, error} ->
         conn
         |> put_status(:bad_request)
-        |> json(%{error: error})
+        |> json(%{error: inspect(error)})
     end
   end
 end

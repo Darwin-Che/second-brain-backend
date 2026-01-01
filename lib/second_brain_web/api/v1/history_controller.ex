@@ -17,4 +17,25 @@ defmodule SecondBrainWeb.Api.V1.HistoryController do
     |> put_status(:ok)
     |> json(%{session_history: session_history})
   end
+
+  def update(conn, %{"id" => id, "changes" => changes} = _params) do
+    account = Guardian.Plug.current_resource(conn)
+
+    allowed_changes =
+      changes
+      |> Map.take(["duration", "notes"])
+      |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+
+    case SessionHistory.update_work_session(account.id, id, allowed_changes) do
+      {:ok, session} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{session: session})
+
+      {:error, reason} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: reason})
+    end
+  end
 end
