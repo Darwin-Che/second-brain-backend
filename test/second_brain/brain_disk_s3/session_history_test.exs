@@ -57,7 +57,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistoryTest do
       assert :ok = SessionHistory.prepend_work_session(account.id, session2)
 
       assert [%{} = file_entry1] = SessionHistory.get_all_session_history_files(account.id)
-      assert [session1, session2] == get_work_session_history_list(account.id)
+      assert [session2, session1] == get_work_session_history_list(account.id)
       assert file_entry1.seq_1 == 1
       assert file_entry1.file_entry_cnt == 2
     end
@@ -72,7 +72,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistoryTest do
 
       # There should be two entry in the database
       assert [%{} = file_entry] = SessionHistory.get_all_session_history_files(account.id)
-      assert [session1, session2] == get_work_session_history_list(account.id)
+      assert [session2, session1] == get_work_session_history_list(account.id)
       assert file_entry.seq_1 == 1
       assert file_entry.file_entry_cnt == 2
 
@@ -83,7 +83,7 @@ defmodule SecondBrain.BrainDiskS3.SessionHistoryTest do
       assert [%{} = file_entry_2, %{} = file_entry_1] =
                SessionHistory.get_all_session_history_files(account.id)
 
-      assert [session1, session2, session3] == get_work_session_history_list(account.id)
+      assert [session3, session2, session1] == get_work_session_history_list(account.id)
       assert file_entry_1.file_name == file_entry.file_name
       assert file_entry_1.seq_1 == 1
       assert file_entry_2.seq_1 == 2

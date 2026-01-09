@@ -7,10 +7,13 @@ defmodule SecondBrain.Factory do
   alias SecondBrain.Db.BrainCache
   alias SecondBrain.Repo
 
+  alias SecondBrain.Struct.WorkSession
+
   ### Work Sessions
 
   def build_work_session_wip(account_id, attrs \\ %{}) do
     defaults = %{
+      id: WorkSession.generate_id(),
       account_id: account_id,
       task_name: "wip test task",
       start_ts: shift_cur_ts_am(-30),
@@ -19,13 +22,14 @@ defmodule SecondBrain.Factory do
     }
 
     struct(
-      SecondBrain.Struct.WorkSession,
+      WorkSession,
       Map.merge(defaults, attrs)
     )
   end
 
   def build_work_session_finished(account_id, attrs \\ %{}) do
     defaults = %{
+      id: WorkSession.generate_id(),
       account_id: account_id,
       task_name: "finished test task",
       start_ts: shift_cur_ts_am(-120),
@@ -34,7 +38,7 @@ defmodule SecondBrain.Factory do
     }
 
     struct(
-      SecondBrain.Struct.WorkSession,
+      WorkSession,
       Map.merge(defaults, attrs)
     )
   end

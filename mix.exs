@@ -63,7 +63,9 @@ defmodule SecondBrain.MixProject do
       {:uuidv7, "~> 1.0"},
       ### Dev Only
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
+      ### Test Only
+      {:meck, "~> 1.1.0", only: :test}
     ]
   end
 
