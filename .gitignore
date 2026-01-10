@@ -28,3 +28,6 @@ second_brain-*.tar
 # Secrets
 .env_prod
 .env_secret
+
+# Custom Generate Files
+/test/fixture/archives/dump_test_dump.json

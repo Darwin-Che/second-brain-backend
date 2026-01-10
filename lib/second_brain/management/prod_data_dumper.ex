@@ -8,6 +8,7 @@ defmodule SecondBrain.Management.ProdDataDumper do
 
   alias SecondBrain.Brain
   alias SecondBrain.BrainDiskS3.SessionHistory
+  alias SecondBrain.BrainDiskS3.Tasks
 
   alias SecondBrain.Management.ArchiveV1
 
@@ -20,19 +21,41 @@ defmodule SecondBrain.Management.ProdDataDumper do
     {:ok, brain_state} = Brain.get_brain_state(account_id)
     IO.inspect(brain_state)
 
+    IO.puts("Fetching Tasks of #{account_id}")
+    {:ok, tasks} = Tasks.load_tasks_from_disk(account_id)
+    IO.inspect(tasks)
+
     IO.puts("Fetching Session History of #{account_id}")
 
-    session_history =
-      account_id
-      |> SessionHistory.get_work_session_history_stream()
-      |> Enum.to_list()
+    file_entries = SessionHistory.get_all_session_history_files(account_id)
 
-    IO.inspect(session_history)
-    IO.puts("Length of Session History: #{length(session_history)}")
+    files_content =
+      Map.new(
+        file_entries,
+        fn file_entry ->
+          {:ok, content} =
+            SessionHistory.load_brain_disk_session_history(account_id, file_entry.file_name)
+
+          {file_entry.file_name, content}
+        end
+      )
+
+    session_history = %{
+      file_entries: file_entries,
+      files_content: files_content
+    }
+
+    Enum.each(file_entries, fn file_entry ->
+      IO.puts("""
+      Session History File #{file_entry.file_name},
+      length = #{length(files_content[file_entry.file_name] || [])}
+      """)
+    end)
 
     archive = %ArchiveV1{
       account_id: account_id,
       brain_state: brain_state,
+      tasks: tasks,
       session_history: session_history
     }
 

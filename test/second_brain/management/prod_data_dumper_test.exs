@@ -1,46 +1,112 @@
 defmodule SecondBrain.Management.ProdDataDumperTest do
-  use ExUnit.Case, async: true
+  use SecondBrain.DataCase, async: true
 
+  import SecondBrain.Factory
+
+  import SecondBrain.Helper
+
+  alias SecondBrain.Management.Delete
   alias SecondBrain.Management.ProdDataDumper
 
+  alias SecondBrain.BrainDiskS3.SessionHistory
+  alias SecondBrain.BrainDiskS3.Tasks
+
+  alias SecondBrain.Brain
+
+  alias SecondBrain.Struct.BrainState
+
+  alias SecondBrain.TestSupport.ArchiveRestore
+
   setup do
-    :meck.new(SecondBrain.Brain, [:passthrough])
-    :meck.new(SecondBrain.BrainDiskS3.SessionHistory, [:passthrough])
-    :meck.new(Jason, [:passthrough])
-    :meck.new(File, [:passthrough])
+    account = insert_account()
 
-    on_exit(fn ->
-      :meck.unload()
-    end)
+    task1 = build_task(task_name: "Task 1")
+    task2 = build_task(task_name: "Task 2")
 
-    :ok
+    :ok = Tasks.put_tasks_to_disk(account.id, [task1, task2])
+
+    session1 =
+      build_work_session_finished(
+        account.id,
+        task_name: "Task 1",
+        start_ts: shift_cur_ts_am(-(60 * 3 + 60)),
+        end_ts: shift_cur_ts_am(-(60 * 3 + 30))
+      )
+
+    SessionHistory.prepend_work_session(account.id, session1)
+
+    session2 =
+      build_work_session_finished(
+        account.id,
+        task_name: "Task 2",
+        start_ts: shift_cur_ts_am(-(60 * 2 + 60)),
+        end_ts: shift_cur_ts_am(-(60 * 2 + 30))
+      )
+
+    SessionHistory.prepend_work_session(account.id, session2)
+
+    session3 =
+      build_work_session_finished(
+        account.id,
+        task_name: "Task 1",
+        start_ts: shift_cur_ts_am(-(60 + 60)),
+        end_ts: shift_cur_ts_am(-(60 + 30))
+      )
+
+    SessionHistory.prepend_work_session(account.id, session3)
+
+    brain_cache =
+      insert_brain_cache_busy(
+        account.id,
+        last_session:
+          build_work_session_wip(
+            account.id,
+            task_name: "session4",
+            start_ts: shift_cur_ts_am(-30),
+            end_ts: shift_cur_ts_am(30)
+          )
+      )
+
+    {:ok,
+     account: account,
+     session1: session1,
+     session2: session2,
+     session3: session3,
+     task1: task1,
+     task2: task2,
+     brain_cache: brain_cache,
+     brain_state: BrainState.from_brain_cache(brain_cache)}
   end
 
-  @tag :tmp_dir
-  test "dump_all_data/2 writes archive to file and prints info", %{tmp_dir: tmp_dir} do
-    account_id = "test_account"
-    output_path = Path.join(tmp_dir, "test_dump.json")
+  test "test dump and restore", %{
+    account: account,
+    session1: session1,
+    session2: session2,
+    session3: session3,
+    task1: task1,
+    task2: task2,
+    brain_state: brain_state
+  } do
+    output_path = Path.join("test/fixture/archives/", "dump_test_dump.json")
 
-    brain_state = %{foo: "bar"}
-    session_history = [%{session: 1}, %{session: 2}]
+    ProdDataDumper.dump_all_data(account.id, output_path)
 
-    archive = %SecondBrain.Management.ArchiveV1{
-      account_id: account_id,
-      brain_state: brain_state,
-      session_history: session_history
-    }
+    # Clear the existing data
+    :ok = Delete.delete_account(account.id)
 
-    :meck.expect(SecondBrain.Brain, :get_brain_state, fn ^account_id -> {:ok, brain_state} end)
+    # assert account data is cleared
+    assert {:error, "Account not found"} = Brain.get_brain_state(account.id)
+    assert {:ok, []} = Tasks.load_tasks_from_disk(account.id)
+    assert [] = SessionHistory.get_all_work_session_history(account.id)
 
-    :meck.expect(
-      SecondBrain.BrainDiskS3.SessionHistory,
-      :get_work_session_history_stream,
-      fn ^account_id -> session_history end
-    )
+    # Restore the archive
+    assert account.id == ArchiveRestore.restore_file("dump_test_dump.json")
 
-    :meck.expect(Jason, :encode!, fn ^archive, pretty: true -> "ARCHIVE_JSON" end)
-    :meck.expect(File, :write!, fn ^output_path, "ARCHIVE_JSON" -> :ok end)
+    # assert the restored data matches the original data
+    assert {:ok, ^brain_state} = Brain.get_brain_state(account.id)
+    assert {:ok, [^task1, ^task2]} = Tasks.load_tasks_from_disk(account.id)
 
-    assert :ok = ProdDataDumper.dump_all_data(account_id, output_path)
+    assert [^session3, ^session2, ^session1] =
+             SessionHistory.get_all_work_session_history(account.id)
   end
 end

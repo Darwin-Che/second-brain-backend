@@ -26,6 +26,24 @@ defmodule SecondBrain.Struct.BrainState do
         }
 
   @doc false
+  def brain_status_from_string("idle"), do: :idle
+  def brain_status_from_string("busy"), do: :busy
+  def brain_status_from_string("onboarding"), do: :onboarding
+
+  @doc false
+  @spec from_json(map()) :: t()
+  def from_json(json) do
+    %BrainState{
+      account_id: Map.get(json, "account_id"),
+      brain_status: json |> Map.get("brain_status") |> brain_status_from_string(),
+      last_session:
+        json
+        |> Map.get("last_session")
+        |> WorkSession.from_json()
+    }
+  end
+
+  @doc false
   @spec new_onboarding(Account.id_t()) :: t()
   def new_onboarding(account_id) do
     %BrainState{

@@ -7,11 +7,33 @@ defmodule SecondBrain.Factory do
   alias SecondBrain.Db.BrainCache
   alias SecondBrain.Repo
 
+  alias SecondBrain.Struct.Task
+  alias SecondBrain.Struct.TaskSchedule
   alias SecondBrain.Struct.WorkSession
+
+  ### Tasks
+
+  def build_task(attrs \\ []) do
+    defaults = %{
+      task_name: "Test Task #{rand_str(4)}",
+      schedules: [
+        %TaskSchedule{
+          start_at: shift_cur_ts_am(-7 * 24 * 60),
+          end_at: nil,
+          hours_per_week: 10.0
+        }
+      ]
+    }
+
+    struct(
+      Task,
+      Map.merge(defaults, Map.new(attrs))
+    )
+  end
 
   ### Work Sessions
 
-  def build_work_session_wip(account_id, attrs \\ %{}) do
+  def build_work_session_wip(account_id, attrs \\ []) do
     defaults = %{
       id: WorkSession.generate_id(),
       account_id: account_id,
@@ -23,11 +45,11 @@ defmodule SecondBrain.Factory do
 
     struct(
       WorkSession,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
-  def build_work_session_finished(account_id, attrs \\ %{}) do
+  def build_work_session_finished(account_id, attrs \\ []) do
     defaults = %{
       id: WorkSession.generate_id(),
       account_id: account_id,
@@ -39,13 +61,13 @@ defmodule SecondBrain.Factory do
 
     struct(
       WorkSession,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
   ### Brain State
 
-  def build_brain_state_onboarding(account_id, attrs \\ %{}) do
+  def build_brain_state_onboarding(account_id, attrs \\ []) do
     defaults = %{
       account_id: account_id,
       brain_status: :onboarding,
@@ -54,11 +76,11 @@ defmodule SecondBrain.Factory do
 
     struct(
       SecondBrain.Struct.BrainState,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
-  def build_brain_state_idle(account_id, attrs \\ %{}) do
+  def build_brain_state_idle(account_id, attrs \\ []) do
     defaults = %{
       account_id: account_id,
       brain_status: :idle,
@@ -67,11 +89,11 @@ defmodule SecondBrain.Factory do
 
     struct(
       SecondBrain.Struct.BrainState,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
-  def build_brain_state_busy(account_id, attrs \\ %{}) do
+  def build_brain_state_busy(account_id, attrs \\ []) do
     defaults = %{
       account_id: account_id,
       brain_status: :busy,
@@ -80,13 +102,13 @@ defmodule SecondBrain.Factory do
 
     struct(
       SecondBrain.Struct.BrainState,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
   ### Account
 
-  def build_account(attrs \\ %{}) do
+  def build_account(attrs \\ []) do
     defaults = %{
       name: "Test Account #{rand_str(4)}",
       email: "#{rand_str(6)}@test.com",
@@ -95,11 +117,11 @@ defmodule SecondBrain.Factory do
 
     struct(
       SecondBrain.Db.Account,
-      Map.merge(defaults, attrs)
+      Map.merge(defaults, Map.new(attrs))
     )
   end
 
-  def insert_account(attrs \\ %{}) do
+  def insert_account(attrs \\ []) do
     account = build_account(attrs)
 
     account
@@ -109,39 +131,39 @@ defmodule SecondBrain.Factory do
 
   ### Brain Cache
 
-  def build_brain_cache_onboarding(account_id, attrs \\ %{}) do
+  def build_brain_cache_onboarding(account_id, attrs \\ []) do
     account_id
     |> build_brain_state_onboarding(attrs)
     |> BrainCache.from_brain_state()
   end
 
-  def insert_brain_cache_onboarding(account_id, attrs \\ %{}) do
+  def insert_brain_cache_onboarding(account_id, attrs \\ []) do
     account_id
     |> build_brain_cache_onboarding(attrs)
     |> BrainCache.changeset(%{})
     |> Repo.insert!()
   end
 
-  def build_brain_cache_idle(account_id, attrs \\ %{}) do
+  def build_brain_cache_idle(account_id, attrs \\ []) do
     account_id
     |> build_brain_state_idle(attrs)
     |> BrainCache.from_brain_state()
   end
 
-  def insert_brain_cache_idle(account_id, attrs \\ %{}) do
+  def insert_brain_cache_idle(account_id, attrs \\ []) do
     account_id
     |> build_brain_cache_idle(attrs)
     |> BrainCache.changeset(%{})
     |> Repo.insert!()
   end
 
-  def build_brain_cache_busy(account_id, attrs \\ %{}) do
+  def build_brain_cache_busy(account_id, attrs \\ []) do
     account_id
     |> build_brain_state_busy(attrs)
     |> BrainCache.from_brain_state()
   end
 
-  def insert_brain_cache_busy(account_id, attrs \\ %{}) do
+  def insert_brain_cache_busy(account_id, attrs \\ []) do
     account_id
     |> build_brain_cache_busy(attrs)
     |> BrainCache.changeset(%{})

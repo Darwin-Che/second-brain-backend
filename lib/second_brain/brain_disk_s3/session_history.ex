@@ -55,6 +55,16 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
     )
   end
 
+  @doc """
+  Please use with care, might have long blocking time
+  """
+  @spec get_all_work_session_history(Account.id_t()) :: [WorkSession.t()]
+  def get_all_work_session_history(account_id) do
+    account_id
+    |> get_work_session_history_stream()
+    |> Enum.to_list()
+  end
+
   # It is a two level tree structure
   # Root -> Session Files -> Sessions
   # Use BFS to traverse it

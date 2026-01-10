@@ -32,4 +32,14 @@ defmodule SecondBrain.Db.BrainDiskS3 do
     |> cast(attrs, [:account_id, :file_name, :file_entry_cnt, :seq_1])
     |> validate_required([:account_id, :file_name, :file_entry_cnt, :seq_1])
   end
+
+  @doc false
+  def from_json(json) do
+    %__MODULE__{
+      account_id: Map.get(json, "account_id"),
+      file_name: Map.get(json, "file_name"),
+      file_entry_cnt: Map.get(json, "file_entry_cnt"),
+      seq_1: Map.get(json, "seq_1")
+    }
+  end
 end
