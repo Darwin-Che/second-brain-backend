@@ -100,7 +100,8 @@ defmodule SecondBrain.Management.ProdDataDumperTest do
     assert [] = SessionHistory.get_all_work_session_history(account.id)
 
     # Restore the archive
-    assert {account.id, _} == ArchiveRestore.restore_file("dump_test_dump.json")
+    {account_id, _} = ArchiveRestore.restore_file("dump_test_dump.json")
+    assert account_id == account.id
 
     # assert the restored data matches the original data
     assert {:ok, ^brain_state} = Brain.get_brain_state(account.id)
