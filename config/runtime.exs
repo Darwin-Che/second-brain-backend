@@ -128,7 +128,7 @@ if config_env() != :test do
 
   config :second_brain, SecondBrain.BrainDiskS3,
     bucket_name: System.fetch_env!("BUCKET_NAME"),
-    max_sessions_per_file: System.fetch_env!("MAX_SESSIONS_PER_FILE")
+    max_sessions_per_file: String.to_integer(System.fetch_env!("MAX_SESSIONS_PER_FILE"))
 
   config :ueberauth, Ueberauth.Strategy.Google.OAuth,
     client_id: {System, :fetch_env!, ["GOOGLE_CLIENT_ID"]},

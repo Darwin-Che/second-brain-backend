@@ -31,7 +31,8 @@ defmodule SecondBrain.BrainDiskS3.SessionHistory do
     account_id
     |> get_work_session_history_stream()
     |> Stream.take_while(fn session ->
-      session.start_ts >= start_ts and session.end_ts <= end_ts
+      DateTime.compare(session.start_ts, start_ts) != :lt and
+        DateTime.compare(session.end_ts, end_ts) != :gt
     end)
     |> Enum.to_list()
   end

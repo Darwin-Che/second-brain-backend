@@ -143,9 +143,10 @@ defmodule SecondBrain.Brain do
   end
 
   @doc false
-  @spec recommend_task(Account.id_t()) :: {:ok, [RecommendTask.t()]} | {:error, any()}
-  def recommend_task(account_id) do
-    end_time = cur_ts_am()
+  @spec recommend_task(Account.id_t(), DateTime.t() | nil) ::
+          {:ok, [RecommendTask.t()]} | {:error, any()}
+  def recommend_task(account_id, cur_ts \\ nil) do
+    end_time = cur_ts || cur_ts_am()
     start_time = DateTime.shift(end_time, week: -4)
 
     with {:ok, tasks} <- BrainDiskS3.Tasks.load_tasks_from_disk(account_id),

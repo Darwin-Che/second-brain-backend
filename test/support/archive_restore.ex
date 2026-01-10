@@ -29,11 +29,13 @@ defmodule SecondBrain.TestSupport.ArchiveRestore do
 
   def restore_archive(archive) do
     account_id = archive.account_id
+
     insert_account(id: account_id)
     restore_brain_state(account_id, archive.brain_state)
     restore_tasks(account_id, archive.tasks)
     restore_session_history(account_id, archive.session_history)
-    account_id
+
+    {account_id, archive.cur_ts}
   end
 
   defp restore_brain_state(_account_id, brain_state) do

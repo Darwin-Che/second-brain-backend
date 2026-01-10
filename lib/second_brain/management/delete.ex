@@ -26,24 +26,28 @@ defmodule SecondBrain.Management.Delete do
 
     case result do
       {:ok, _} ->
-        DiskS3Manager.bucket_name()
-        |> ExAws.S3.list_objects_v2(prefix: account_object_prefix(account.id))
-        |> ExAws.stream!()
-        |> Stream.chunk_every(64)
-        |> Stream.each(fn list_of_objects ->
-          ExAws.S3.delete_multiple_objects(
-            DiskS3Manager.bucket_name(),
-            Enum.map(list_of_objects, & &1.key)
-          )
-          |> ExAws.request!()
-        end)
-        |> Stream.run()
-
+        delete_account_disk_s3(account_id)
         :ok
 
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  @doc false
+  def delete_account_disk_s3(account_id) do
+    DiskS3Manager.bucket_name()
+    |> ExAws.S3.list_objects_v2(prefix: account_object_prefix(account_id))
+    |> ExAws.stream!()
+    |> Stream.chunk_every(64)
+    |> Stream.each(fn list_of_objects ->
+      ExAws.S3.delete_multiple_objects(
+        DiskS3Manager.bucket_name(),
+        Enum.map(list_of_objects, & &1.key)
+      )
+      |> ExAws.request!()
+    end)
+    |> Stream.run()
   end
 
   defp account_object_prefix(account_id) do

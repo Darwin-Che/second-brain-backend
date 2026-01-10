@@ -1,0 +1,452 @@
+{
+  "cur_ts": "2026-01-10T20:52:00Z",
+  "version": 1,
+  "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+  "brain_state": {
+    "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+    "brain_status": "busy",
+    "last_session": {
+      "id": null,
+      "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+      "task_name": "Personal Growth",
+      "start_ts": "2026-01-10T19:35:00Z",
+      "end_ts": "2026-01-10T20:04:00Z",
+      "notes": ""
+    }
+  },
+  "tasks": [
+    {
+      "task_name": "French",
+      "schedules": [
+        {
+          "start_at": "2025-12-31T01:08:00Z",
+          "end_at": null,
+          "hours_per_week": 14
+        }
+      ]
+    },
+    {
+      "task_name": "Misc",
+      "schedules": [
+        {
+          "start_at": "2025-12-31T01:11:00Z",
+          "end_at": null,
+          "hours_per_week": 5
+        }
+      ]
+    },
+    {
+      "task_name": "Personal Growth",
+      "schedules": [
+        {
+          "start_at": "2025-12-31T01:10:00Z",
+          "end_at": null,
+          "hours_per_week": 7
+        }
+      ]
+    },
+    {
+      "task_name": "Run",
+      "schedules": [
+        {
+          "start_at": "2025-12-31T01:09:00Z",
+          "end_at": null,
+          "hours_per_week": 10
+        }
+      ]
+    },
+    {
+      "task_name": "Work",
+      "schedules": [
+        {
+          "start_at": "2025-12-31T01:09:00Z",
+          "end_at": null,
+          "hours_per_week": 30
+        }
+      ]
+    }
+  ],
+  "session_history": {
+    "file_entries": [
+      {
+        "id": "d8159623-d783-443a-980a-cd78553f146d",
+        "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+        "file_name": "019b7263-1788-7b79-9b7d-82dbb082f92b",
+        "file_entry_cnt": 46,
+        "seq_1": 1
+      }
+    ],
+    "files_content": {
+      "019b7263-1788-7b79-9b7d-82dbb082f92b": [
+        {
+          "id": "019ba91b-870c-7be9-a4a9-3fbafef38589",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-10T17:45:00Z",
+          "end_ts": "2026-01-10T18:12:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba8b8-c321-7ed9-ab60-ed36c4a71c30",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-10T16:08:00Z",
+          "end_ts": "2026-01-10T16:24:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba8a9-c89c-7674-a7ce-9dd9701ebf18",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-10T15:21:00Z",
+          "end_ts": "2026-01-10T16:08:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba678-2d35-75cc-b8dc-c44e45d8a32a",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-10T05:23:00Z",
+          "end_ts": "2026-01-10T05:55:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba639-c56c-734b-b186-b89330414b44",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-10T04:10:00Z",
+          "end_ts": "2026-01-10T04:47:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba618-9d9e-7978-b109-2da971e7ce14",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2026-01-09T23:44:00Z",
+          "end_ts": "2026-01-10T04:10:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba524-545b-7b84-acf1-9c03cd1525f2",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-09T22:57:00Z",
+          "end_ts": "2026-01-09T23:44:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019ba4f2-0bf4-7e3c-b100-1767a7cbdc78",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-09T15:16:00Z",
+          "end_ts": "2026-01-09T22:49:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b9f87-7f85-7a93-b71f-35c02b3a94ad",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-08T14:56:00Z",
+          "end_ts": "2026-01-08T21:34:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b9bde-73ad-7d30-b2fa-50e07b984092",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2026-01-07T23:19:00Z",
+          "end_ts": "2026-01-08T04:31:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b9a73-6ba7-7cbf-8d90-02cab00e9b3c",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-07T15:09:00Z",
+          "end_ts": "2026-01-07T21:54:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b96ad-3829-7d44-b378-050b9a8173f4",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-07T02:50:00Z",
+          "end_ts": "2026-01-07T04:19:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b9632-05ab-7bf0-94b0-4799b88209f4",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-07T01:39:00Z",
+          "end_ts": "2026-01-07T02:04:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b958e-e0ed-7498-a45a-a49f084e6794",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-06T18:56:00Z",
+          "end_ts": "2026-01-06T23:06:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b949f-a824-7a5d-970a-e4f1b62fc517",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-06T17:35:00Z",
+          "end_ts": "2026-01-06T18:45:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b945a-77a1-758a-ab28-81433b55967f",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-06T14:09:00Z",
+          "end_ts": "2026-01-06T17:29:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b9178-d4b7-7a64-993a-d1afc00b40d1",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2026-01-06T00:28:00Z",
+          "end_ts": "2026-01-06T04:03:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b90b3-e421-7d2e-ac4a-6ba7903807ea",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-05T20:08:00Z",
+          "end_ts": "2026-01-06T00:28:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8f98-f93c-7103-a883-d17f75fbf129",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-05T14:45:00Z",
+          "end_ts": "2026-01-05T19:19:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8c61-f0cc-7d73-b195-5aa3e8326181",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-05T04:10:00Z",
+          "end_ts": "2026-01-05T04:20:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8c03-121a-7b14-a17e-99f3f8172ba8",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2026-01-04T23:08:00Z",
+          "end_ts": "2026-01-05T02:37:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8b13-2bec-78e7-9c1c-2596a5705b75",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-04T20:25:00Z",
+          "end_ts": "2026-01-04T22:15:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b89ca-693c-7618-b7d9-b41d8b7db9c1",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-04T15:50:00Z",
+          "end_ts": "2026-01-04T16:16:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b89b2-7e71-71cd-a8d0-a42f74714690",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-04T04:02:00Z",
+          "end_ts": "2026-01-04T05:02:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b853b-6794-77ea-a925-9465bc82bc8d",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-03T18:51:00Z",
+          "end_ts": "2026-01-03T19:01:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b84d0-c6ff-7929-97e6-e9d542fb4160",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-03T16:29:00Z",
+          "end_ts": "2026-01-03T17:04:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b84b0-23f8-7a6b-b808-b30fd6e8d7d7",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-03T15:35:00Z",
+          "end_ts": "2026-01-03T16:29:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8245-9b9d-7053-861b-bfec2b4716a0",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2026-01-03T00:12:00Z",
+          "end_ts": "2026-01-03T05:13:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b810f-a36e-7745-825f-77624b13caaa",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-02T23:11:00Z",
+          "end_ts": "2026-01-02T23:35:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b8083-9bce-778c-849a-a2416667497f",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-02T18:51:00Z",
+          "end_ts": "2026-01-02T21:02:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7f53-79cf-7068-9147-48687ed9f000",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2026-01-02T14:18:00Z",
+          "end_ts": "2026-01-02T15:29:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7d47-dbed-740c-8403-34eca3b5fe8b",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-02T03:37:00Z",
+          "end_ts": "2026-01-02T04:37:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7c28-d346-79c8-baba-9aff3581c717",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-02T00:04:00Z",
+          "end_ts": "2026-01-02T00:44:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b75-a16a-78de-b679-1e21bab0e606",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-01T20:24:00Z",
+          "end_ts": "2026-01-01T21:28:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b0a-a0d4-7312-a7c7-8bc4bb6a4e0f",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-01T18:28:00Z",
+          "end_ts": "2026-01-01T19:31:00Z",
+          "notes": "Can finally edit session"
+        },
+        {
+          "id": "019b7b06-9b2d-760d-9a47-4ec37ed7791a",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-01T17:09:00Z",
+          "end_ts": "2026-01-01T17:54:00Z",
+          "notes": "end to take lunch"
+        },
+        {
+          "id": "019b7b06-9b2d-7e2f-849f-7643f4bd5ab5",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2026-01-01T03:26:00Z",
+          "end_ts": "2026-01-01T03:56:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b06-9b2d-70c2-beb5-433ff15fb45e",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2026-01-01T02:12:00Z",
+          "end_ts": "2026-01-01T02:25:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b06-9b2d-7589-af9b-a39bd6f9efb6",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2025-12-31T22:12:00Z",
+          "end_ts": "2026-01-01T00:15:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b06-9b2d-7e5e-b439-a12cc3e630d5",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2025-12-31T21:02:00Z",
+          "end_ts": "2025-12-31T21:40:00Z",
+          "notes": "distracted by lexie"
+        },
+        {
+          "id": "019b7b06-9b2d-74a4-a99a-4a5bea08647f",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2025-12-31T18:58:00Z",
+          "end_ts": "2025-12-31T20:04:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b06-9b2d-71e7-8a6c-3789642e98ab",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Work",
+          "start_ts": "2025-12-31T15:52:00Z",
+          "end_ts": "2025-12-31T17:43:00Z",
+          "notes": ""
+        },
+        {
+          "id": "019b7b06-9b2d-70df-ae87-c603b3a2a686",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2025-12-31T14:31:00Z",
+          "end_ts": "2025-12-31T14:48:00Z",
+          "notes": "Écouter écrire"
+        },
+        {
+          "id": "019b7b06-9b2d-7142-a827-1fcd8c591028",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Personal Growth",
+          "start_ts": "2025-12-31T04:47:00Z",
+          "end_ts": "2025-12-31T05:01:00Z",
+          "notes": "Read briefly the ps for ucb"
+        },
+        {
+          "id": "019b7b06-9b2d-7280-bebd-ff664c3850cb",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "French",
+          "start_ts": "2025-12-31T04:23:00Z",
+          "end_ts": "2025-12-31T04:46:00Z",
+          "notes": "Écouter écrire"
+        },
+        {
+          "id": "019b7b06-9b2d-7d48-8124-428d1824752b",
+          "account_id": "73ea63cb-7e3b-49d7-907c-1acc76c375e7",
+          "task_name": "Run",
+          "start_ts": "2025-12-31T01:11:00Z",
+          "end_ts": "2025-12-31T03:11:00Z",
+          "notes": "A good 1 hour run, plus had bread and eggs"
+        }
+      ]
+    }
+  }
+}

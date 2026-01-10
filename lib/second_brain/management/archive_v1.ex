@@ -40,6 +40,7 @@ defmodule SecondBrain.Management.ArchiveV1 do
         }
 
   @type t() :: %__MODULE__{
+          cur_ts: DateTime.t(),
           version: integer(),
           account_id: Account.id_t(),
           brain_state: BrainState.t(),
@@ -51,6 +52,7 @@ defmodule SecondBrain.Management.ArchiveV1 do
   @spec from_json(map()) :: ArchiveV1.t()
   def from_json(json) do
     %__MODULE__{
+      cur_ts: parse_datetime(Map.get(json, "cur_ts")),
       version: Map.get(json, "version"),
       account_id: Map.get(json, "account_id"),
       brain_state:
