@@ -156,7 +156,7 @@ defmodule SecondBrain.Brain do
              start_time,
              end_time
            ) do
-      RecommendTask.recommend_by_history(tasks, session_history, end_time, limit_n: 5)
+      RecommendTask.recommend_by_history(tasks, session_history, end_time)
     else
       {:error, error} -> {:error, error}
     end
