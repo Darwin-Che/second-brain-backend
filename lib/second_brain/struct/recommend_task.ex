@@ -39,7 +39,7 @@ defmodule SecondBrain.Struct.RecommendTask do
   @spec recommend_by_history([Task.t()], [WorkSession.t()], DateTime.t(), keyword()) ::
           {:ok, [__MODULE__.t()]} | {:error, any()}
   def recommend_by_history(available_tasks, session_history, cur_ts, opts \\ []) do
-    limit_n = Keyword.get(opts, :limit_n, 5)
+    limit_n = Keyword.get(opts, :limit_n, nil)
 
     desired_effort_by_task = get_desired_effort_by_task(available_tasks)
     Logger.debug("Desired effort by task: #{inspect(desired_effort_by_task)}")
@@ -76,11 +76,17 @@ defmodule SecondBrain.Struct.RecommendTask do
       recommendations
       |> Enum.filter(fn %{desired_effort: desired_effort} -> desired_effort > 0 end)
       |> Enum.sort_by(&{&1.current_percent_effort, -&1.desired_effort})
-      |> Enum.take(limit_n)
 
-    Logger.debug("Selected recommendations: #{inspect(selected_recommendations)}")
+    taked_recommendations =
+      case limit_n do
+        nil -> selected_recommendations
+        n when is_integer(n) and n > 0 -> Enum.take(selected_recommendations, n)
+        _ -> selected_recommendations
+      end
 
-    {:ok, selected_recommendations}
+    Logger.debug("Selected recommendations: #{inspect(taked_recommendations)}")
+
+    {:ok, taked_recommendations}
   end
 
   @doc false
